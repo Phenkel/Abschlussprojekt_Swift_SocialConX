@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct MailCheck: Codable {
+    let valid, block, disposable, emailForwarder: Bool
+    let domain, text: String
+}

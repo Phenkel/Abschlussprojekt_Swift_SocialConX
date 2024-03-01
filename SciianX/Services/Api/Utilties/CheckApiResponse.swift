@@ -7,19 +7,11 @@
 
 import Foundation
 
-/// Überprüft die HTTP-Antwort und wirft einen entsprechenden Fehler basierend auf dem Statuscode.
-///
-/// - Parameter response: Das Tupel, das die Antwortdaten und die URL-Antwort enthält.
-/// - Returns: Die Antwortdaten, wenn der Statuscode erfolgreich ist.
-/// - Throws: Einen Fehler des `enum NetworkError`, wenn ein unerwarteter Statuscode auftritt.
 func checkResponse(_ response: (data: Data, response: URLResponse)) throws -> Data {
-    // Überprüfen, ob die Antwort eine HTTP-Antwort ist
     guard let httpResponse = response.response as? HTTPURLResponse else {
-        // Rückgabedaten ohne Änderung, wenn keine HTTP-Antwort vorhanden
         return response.data
     }
     
-    // Überprüfen des Statuscodes und entsprechendes Werfen des Fehlers
     switch httpResponse.statusCode {
     case 200..<300:
         // Der Statuscode liegt im erfolgreichen Bereich (200-299), daher werden die Antwortdaten zurückgegeben.
