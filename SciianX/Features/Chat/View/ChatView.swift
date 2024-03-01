@@ -9,7 +9,46 @@ import SwiftUI
 
 struct ChatView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            ZStack {
+                BackgroundImage()
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVStack {
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(0...25, id: \.self) { post in
+                                    ProfilePictureSmall()
+                                }
+                            }
+                            .padding()
+                        }
+                        Divider()
+                        
+                        ForEach(0...25, id: \.self) { post in
+                            NavigationLink(
+                                destination: SingleChatView(),
+                                label: {
+                                    ChatPreviewRow()
+                                })
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Xversations")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        
+                    }, label: {
+                        Text("Translated Texts")
+                            .font(.caption2)
+                    })
+                }
+            }
+        }
     }
 }
 

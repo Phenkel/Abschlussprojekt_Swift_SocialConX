@@ -9,7 +9,20 @@ import SwiftUI
 
 struct ProfilePictureBig: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button(action: {
+            
+        }, label: {
+            Image("testPic")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+                .clipShape(Circle())
+                .overlay(content: {
+                    Circle()
+                        .stroke(lineWidth: 3.0)
+                        .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.red, .blue]), startPoint: .leading, endPoint: .trailing))
+                })
+        })
     }
 }
 

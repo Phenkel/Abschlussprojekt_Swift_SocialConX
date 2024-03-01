@@ -11,7 +11,7 @@ struct ProfilePreviewRow: View {
     var body: some View {
         VStack {
             HStack {
-                ProfilePictureSmallView()
+                ProfilePictureSmall()
                 
                 VStack {
                     Text("Username")

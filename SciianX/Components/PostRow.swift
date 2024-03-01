@@ -12,7 +12,7 @@ struct PostRow: View {
         VStack {
             HStack(alignment: .top, spacing: 16) {
                 // Profile Picture
-                ProfilePictureSmallView()
+                ProfilePictureSmall()
                 
                 VStack() {
                     HStack {
@@ -72,6 +72,8 @@ struct PostRow: View {
                     .padding(.vertical, 8)
                 }
             }
+            
+            Divider()
         }
         .padding()
     }

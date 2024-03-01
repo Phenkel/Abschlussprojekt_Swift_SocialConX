@@ -13,51 +13,20 @@ struct ExploreView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVStack {
-                    ForEach(0...25, id: \.self) { user in
-                        HStack {
-                            Image("testPic")
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 56, height: 56)
-                                .clipShape(Circle())
-                                .shadow(color: .blue, radius: 5)
-                            
-                            VStack {
-                                Text("Username")
-                                    .font(.footnote)
-                                    .fontWeight(.semibold)
-                                
-                                Text("Real Name")
-                                    .font(.footnote)
-                                    .fontWeight(.thin)
-                            }
-                            
-                            Spacer()
-                            
-                            Button(action: {
-                                
-                            }, label: {
-                                Text("Follow")
-                                    .fontWeight(.semibold)
-                                    .frame(width: 80, height: 40)
-                                    .overlay {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(.blue, lineWidth: 1)
-                                    }
-                            })
+            ZStack {
+                BackgroundImage()
+                
+                ScrollView(showsIndicators: false) {
+                    LazyVStack {
+                        ForEach(0...25, id: \.self) { user in
+                            ProfilePreviewRow()
                         }
-                        .padding(.horizontal)
-                        .padding(.vertical, 4)
-                        
-                        DividerSingleX()
                     }
                 }
+                .navigationTitle("ConXplore")
+                .navigationBarTitleDisplayMode(.inline)
+            .searchable(text: $search, prompt: "Search_Key")
             }
-            .navigationTitle("ConXplore")
-            .navigationBarTitleDisplayMode(.large)
-            .searchable(text: $search, prompt: "Search")
         }
     }
 }

@@ -7,58 +7,59 @@
 
 import SwiftUI
 
+enum PageSelection: String {
+    case feed, explore, chat, activity, profile
+}
+
 struct ContentView: View {
     
-    @State private var selected = 0
+    @State private var selected: PageSelection = .feed
     
     var body: some View {
         TabView(selection: $selected) {
-            FeedView()
-                .tabItem {
-                    Image(systemName: selected == 0 ? "house.fill" : "house")
-                        .environment(\.symbolVariants, selected == 0 ? .fill : .none)
-                    Text("Xpressions")
-                }
-                .onAppear { selected = 0 }
-                .tag(0)
-                .badge(99)
-            
-            ExploreView()
-                .tabItem {
-                    Image(systemName: selected == 1 ? "circle.hexagonpath.fill" : "circle.hexagonpath")
-                        .environment(\.symbolVariants, selected == 1 ? .fill : .none)
-                    Text("Xplore")
-                }
-                .onAppear { selected = 1 }
-                .tag(1)
-            
-            ChatView()
-                .tabItem {
-                    Image(systemName: selected == 2 ? "message.fill" : "message")
-                        .environment(\.symbolVariants, selected == 2 ? .fill : .none)
-                    Text("Xversations")
-                }
-                .onAppear { selected = 2 }
-                .tag(2)
-                .badge(99)
-            
-            ActivityView()
-                .tabItem {
-                    Image(systemName: selected == 3 ? "heart.fill" : "heart")
-                        .environment(\.symbolVariants, selected == 3 ? .fill : .none)
-                    Text("Xtivity")
-                }
-                .onAppear { selected = 3 }
-                .tag(3)
-            
-            ProfileView()
-                .tabItem {
-                    Image(systemName: selected == 4 ? "person.fill" : "person")
-                        .environment(\.symbolVariants, selected == 4 ? .fill : .none)
-                    Text("Xdentity")
-                }
-                .onAppear { selected = 4 }
-                .tag(4)
+            Group {
+                FeedView()
+                    .tabItem {
+                        Image(systemName: selected == .feed ? "house.fill" : "house")
+                            .environment(\.symbolVariants, selected == .feed ? .fill : .none)
+                        Text("Xpressions")
+                    }
+                    .tag(PageSelection.feed)
+                    .badge(99)
+                
+                ExploreView()
+                    .tabItem {
+                        Image(systemName: selected == .explore ? "circle.hexagonpath.fill" : "circle.hexagonpath")
+                            .environment(\.symbolVariants, selected == .explore ? .fill : .none)
+                        Text("Xplore")
+                    }
+                    .tag(PageSelection.explore)
+                
+                ChatView()
+                    .tabItem {
+                        Image(systemName: selected == .chat ? "message.fill" : "message")
+                            .environment(\.symbolVariants, selected == .chat ? .fill : .none)
+                        Text("Xversations")
+                    }
+                    .tag(PageSelection.chat)
+                    .badge(99)
+                
+                ActivityView()
+                    .tabItem {
+                        Image(systemName: selected == .activity ? "heart.fill" : "heart")
+                            .environment(\.symbolVariants, selected == .activity ? .fill : .none)
+                        Text("Xtivity")
+                    }
+                    .tag(PageSelection.activity)
+                
+                ProfileView()
+                    .tabItem {
+                        Image(systemName: selected == .profile ? "person.fill" : "person")
+                            .environment(\.symbolVariants, selected == .profile ? .fill : .none)
+                        Text("Xdentity")
+                    }
+                    .tag(PageSelection.profile)
+            }
         }
     }
 }

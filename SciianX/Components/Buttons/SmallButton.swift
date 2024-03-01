@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SmallButton: View {
     
-    var label: String
+    var label: LocalizedStringKey
     var color: Color
     var action: () -> Void
     

@@ -1,8 +1,4 @@
-//
-//  ScreenSize.swift
-//  SciianX
-//
-//  Created by Philipp Henkel on 11.01.24.
-//
+import UIKit
 
-import Foundation
+let screenWidth = UIScreen.main.bounds.width
+let screenHeight = UIScreen.main.bounds.height

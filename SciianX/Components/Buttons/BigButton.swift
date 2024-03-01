@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct BigButton: View {
+    
+    var label: String
+    var color: Color
+    var action: () -> Void
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button(action: self.action, label: {
+            HStack {
+                Text(self.label)
+                    .foregroundStyle(self.color)
+                    .fontWeight(.semibold)
+                    .frame(width: 200, height: 40)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(self.color, lineWidth: 1)
+                    }
+            }
+        })
     }
 }
 
 #Preview {
-    BigButton()
+    BigButton(
+        label: "Delete",
+        color: .red,
+        action: {}
+    )
 }
