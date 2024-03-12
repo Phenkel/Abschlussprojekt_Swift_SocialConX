@@ -10,7 +10,6 @@ import Foundation
 class TranslationRepository {
     
     static let shared = TranslationRepository()
-    private let apiKey = "c2f07c81a1msha6f1543ac98dd5fp1f3425jsnaa46c190a646"
     
     private init() {}
     
@@ -21,10 +20,10 @@ class TranslationRepository {
         
         let headers = [
             "content-type": "application/x-www-form-urlencoded",
-            "X-RapidAPI-Key": self.apiKey,
+            "X-RapidAPI-Key": ApiManager.xRapidApiKey,
         ]
         
-        let postData = "source_language=auto&target_language=\(self.getLanguageCode())&text=\(text)?".data(using: .utf8)
+        let postData = "source_language=auto&target_language=\(self.getLanguageCode())&text=\(text)".data(using: .utf8)
         
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -33,7 +32,7 @@ class TranslationRepository {
         
         let response = try await URLSession.shared.data(for: urlRequest)
         
-        let data = try checkResponse(response)
+        let data = try checkApiResponse(response)
         
         return try JSONDecoder().decode(TranslationResponse.self, from: data)
     }

@@ -6,12 +6,27 @@
 //
 
 import SwiftUI
+import FirebaseCore
 
 @main
 struct SciianXApp: App {
+    
+    init() {
+        FirebaseConfiguration.shared.setLoggerLevel(.min)
+        FirebaseApp.configure()
+    }
+    
+    @StateObject var authenticationViewModel = AuthenticationViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if authenticationViewModel.user != nil {
+                ContentView()
+                    .environmentObject(self.authenticationViewModel)
+            } else {
+                LoginAndRegisterView()
+                    .environmentObject(self.authenticationViewModel)
+            }
         }
     }
 }

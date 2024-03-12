@@ -2,11 +2,14 @@ import SwiftUI
 
 struct LoginAndRegisterView: View {
     
-    @State private var isLogin = false
+    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    
+    @State private var isLogin = true
     @State private var email = ""
     @State private var password = ""
     @State private var passwordConfirm = ""
-    @State private var alias = ""
+    @State private var realName = ""
+    @State private var userName = ""
     
     var body: some View {
         NavigationView {
@@ -40,6 +43,16 @@ struct LoginAndRegisterView: View {
                                 Image(systemName: "eye.slash.fill")
                                 SecureField("PasswordConfirm_Key", text: $passwordConfirm)
                             }
+                            HStack {
+                                Image(systemName: "person.fill")
+                                TextField("Real Name", text: $realName)
+                                    .keyboardType(.emailAddress)
+                            }
+                            HStack {
+                                Image(systemName: "person.fill")
+                                TextField("Username", text: $userName)
+                                    .keyboardType(.emailAddress)
+                            }
                         }
                     }
                     .padding(12)
@@ -47,7 +60,21 @@ struct LoginAndRegisterView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     
                     Button(action: {
-                        // Button Action
+                        if isLogin {
+                            withAnimation {
+                                authenticationViewModel.login(mail: self.email, password: self.password)
+                            }
+                        } else {
+                            withAnimation {
+                                authenticationViewModel.register(
+                                    mail: self.email,
+                                    password: self.password,
+                                    passwordConfirm: self.passwordConfirm,
+                                    realName: self.realName,
+                                    userName: self.userName
+                                )
+                            }
+                        }
                     }, label: {
                         HStack {
                             Spacer()
@@ -59,6 +86,13 @@ struct LoginAndRegisterView: View {
                     })
                     .background(.blue)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
+                    
+                    if !authenticationViewModel.errorMessage.isEmpty {
+                        Text(authenticationViewModel.errorMessage)
+                            .font(.footnote)
+                            .fontWidth(.compressed)
+                            .foregroundStyle(.red)
+                    }
                 }
                 .padding()
             }
@@ -68,4 +102,5 @@ struct LoginAndRegisterView: View {
 
 #Preview {
     LoginAndRegisterView()
+        .environmentObject(AuthenticationViewModel())
 }

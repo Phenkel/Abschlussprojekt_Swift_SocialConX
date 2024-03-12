@@ -10,7 +10,6 @@ import Foundation
 class MailCheckRepository {
     
     static let shared = MailCheckRepository()
-    private let apiKey = "c2f07c81a1msha6f1543ac98dd5fp1f3425jsnaa46c190a646"
     
     private init() {}
     
@@ -20,11 +19,11 @@ class MailCheckRepository {
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.setValue(self.apiKey, forHTTPHeaderField: "X-RapidAPI-Key")
+        urlRequest.setValue(ApiManager.xRapidApiKey, forHTTPHeaderField: "X-RapidAPI-Key")
         
         let response = try await URLSession.shared.data(for: urlRequest)
         
-        let data = try checkResponse(response)
+        let data = try checkApiResponse(response)
         
         return try JSONDecoder().decode(MailCheck.self, from: data)
     }

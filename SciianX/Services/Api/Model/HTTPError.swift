@@ -18,7 +18,7 @@ enum HTTPError: Error, LocalizedError {
     case http(_ statusCode: Int)
     case invalidUrl
     
-    public var localizedDescription: String {
+    var localizedDescription: String {
         switch self {
         case .badRequest:
             return "Bad request"
