@@ -7,11 +7,12 @@
 
 import Foundation
 
-struct UserProfile: Codable {
-    var id: String
-    var email: String
-    var realName: String
-    var userName: String
-    var registeredAt: Date
-    var lastActiveAt: Date
+struct UserProfile: Codable, Equatable {
+    let id: String
+    let email: String
+    let realName: String
+    let userName: String
+    let registeredAt: Date
+    let lastActiveAt: Date
+    let following: [UserProfile]
 }

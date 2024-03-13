@@ -14,16 +14,16 @@ class MailCheckRepository {
     private init() {}
     
     func checkEmail(_ mail: String) async throws -> MailCheck {
-        guard let url = URL(string: "https://mailcheck.p.rapidapi.com/\(mail)") else {
+        guard let url = URL(string: "https://mailcheck.p.rapidapi.com/?domain=\(mail)") else {
             throw HTTPError.invalidUrl
         }
         
         var urlRequest = URLRequest(url: url)
-        urlRequest.setValue(ApiManager.xRapidApiKey, forHTTPHeaderField: "X-RapidAPI-Key")
+        urlRequest.setValue(ApiManager.shared.xRapidApiKey, forHTTPHeaderField: "X-RapidAPI-Key")
         
         let response = try await URLSession.shared.data(for: urlRequest)
         
-        let data = try checkApiResponse(response)
+        let data = try ApiManager.shared.checkApiResponse(response)
         
         return try JSONDecoder().decode(MailCheck.self, from: data)
     }

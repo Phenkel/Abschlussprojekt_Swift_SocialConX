@@ -1,15 +1,12 @@
-//
-//  CreatePostView.swift
-//  SciianX
-//
-//  Created by Philipp Henkel on 01.03.24.
-//
-
 import SwiftUI
 
-struct CreatePostView: View {
+struct CreateFeedView: View {
+    
+    @EnvironmentObject private var feedsViewModel: FeedsViewModel
+    @EnvironmentObject private var authenticationViewModel: AuthenticationViewModel
     
     @State private var post = ""
+    
     @Environment (\.dismiss) var dismiss
     
     var body: some View {
@@ -55,7 +52,9 @@ struct CreatePostView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        // MARK: POST ACTION
+                        if let user = self.authenticationViewModel.user {
+                            self.feedsViewModel.createFeed(self.post, withUser: user)
+                        }
                         self.dismiss()
                     }, label: {
                         Text("Post")
@@ -65,8 +64,4 @@ struct CreatePostView: View {
             }
         }
     }
-}
-
-#Preview {
-    CreatePostView()
 }

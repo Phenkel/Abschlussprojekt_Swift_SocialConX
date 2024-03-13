@@ -20,7 +20,7 @@ class TranslationRepository {
         
         let headers = [
             "content-type": "application/x-www-form-urlencoded",
-            "X-RapidAPI-Key": ApiManager.xRapidApiKey,
+            "X-RapidAPI-Key": ApiManager.shared.xRapidApiKey,
         ]
         
         let postData = "source_language=auto&target_language=\(self.getLanguageCode())&text=\(text)".data(using: .utf8)
@@ -32,7 +32,7 @@ class TranslationRepository {
         
         let response = try await URLSession.shared.data(for: urlRequest)
         
-        let data = try checkApiResponse(response)
+        let data = try ApiManager.shared.checkApiResponse(response)
         
         return try JSONDecoder().decode(TranslationResponse.self, from: data)
     }
@@ -52,15 +52,11 @@ class TranslationRepository {
             "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "yo", "zu",
             "he", "zh"
         ]
-        
-        guard let localLanguageCode = Locale.current.language.languageCode?.identifier else {
+                
+        guard let localLanguageCode = Locale.current.language.languageCode?.identifier, availableLanguageCodes.contains(localLanguageCode) else {
             return "en"
         }
         
-        if availableLanguageCodes.contains(localLanguageCode) {
-            return localLanguageCode
-        } else {
-            return "en"
-        }
+        return localLanguageCode
     }
 }

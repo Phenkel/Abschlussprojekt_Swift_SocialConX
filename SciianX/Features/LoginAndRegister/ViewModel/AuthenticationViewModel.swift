@@ -9,14 +9,15 @@ import Foundation
 
 class AuthenticationViewModel: ObservableObject {
     
-    @Published var user: UserProfile?
-    @Published var errorMessage: String = "testestest"
+    @Published private(set) var user: UserProfile?
+    @Published private(set) var errorMessage: String = ""
+    @Published private(set) var allUsers: [UserProfile] = []
     
     private var mailCheckRepository = MailCheckRepository.shared
-    private var firebaseRepository = FirebaseRepository.shared
+    private var authenticationRepository = FirebaseAuthenticationRepository.shared
     
     init() {
-        firebaseRepository.checkAuth() { result in
+        self.authenticationRepository.checkAuth() { result in
             switch result {
             case .success(let user):
                 self.user = user
@@ -24,12 +25,13 @@ class AuthenticationViewModel: ObservableObject {
                 self.errorMessage = error.localizedDescription
             }
         }
+        self.fetchAllUsers()
     }
     
     func login(mail: String, password: String) {
         self.errorMessage = ""
         
-        firebaseRepository.login(email: mail, password: password) { result in
+        self.authenticationRepository.login(email: mail, password: password) { result in
             switch result {
             case .success(let user):
                 self.user = user
@@ -44,7 +46,7 @@ class AuthenticationViewModel: ObservableObject {
         self.errorMessage = ""
         
         guard !mail.isEmpty, !password.isEmpty, !passwordConfirm.isEmpty, !realName.isEmpty, !userName.isEmpty else {
-            self.errorMessage = "Please fill every field."
+            self.errorMessage = "Please fill out every field."
             return
         }
         
@@ -53,14 +55,14 @@ class AuthenticationViewModel: ObservableObject {
             return
         }
         
-        let passwordRegex = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}$"
+        let passwordRegex = "^(?=.{6,}).*$"
         guard password.range(of: passwordRegex, options: .regularExpression) != nil else {
-            self.errorMessage = """
-            Password need 6 characters
-            Password need 1 letter
-            Password need 1 number
-            Password need 1 special character
-            """
+            self.errorMessage = "Password needs at least 6 characters"
+            return
+        }
+        
+        guard allUsers.contains(where: { $0.userName.lowercased() == userName.lowercased() }) else {
+            self.errorMessage = "Username is already in use"
             return
         }
         
@@ -69,7 +71,7 @@ class AuthenticationViewModel: ObservableObject {
                 let mailCheck = try await mailCheckRepository.checkEmail(mail)
                 
                 if mailCheck.valid, !mailCheck.block, !mailCheck.disposable, !mailCheck.emailForwarder {
-                    firebaseRepository.register(email: mail, password: password, realName: realName, userName: userName) { result in
+                    authenticationRepository.register(email: mail, password: password, realName: realName, userName: userName) { result in
                         switch result {
                         case .success(let user):
                             self.user = user
@@ -83,6 +85,17 @@ class AuthenticationViewModel: ObservableObject {
             } catch {
                 self.errorMessage = "Could not validate eMail"
                 print("Failed validating email: \(error)")
+            }
+        }
+    }
+    
+    private func fetchAllUsers() {
+        self.authenticationRepository.fetchAllUsers() { result in
+            switch result {
+            case .success(let users):
+                self.allUsers = users
+            case .failure(let error):
+                print("Failed fetching users: \(error)")
             }
         }
     }

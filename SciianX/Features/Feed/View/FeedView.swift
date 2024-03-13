@@ -1,16 +1,17 @@
-//
-//  FeedView.swift
-//  SciianX
-//
-//  Created by Philipp Henkel on 11.01.24.
-//
-
 import SwiftUI
 
 struct FeedView: View {
     
+    @StateObject var feedsViewModel: FeedsViewModel
+    
     @State private var showAll = true
     @State private var showCreatePost = false
+    
+    /*
+    init(feedsViewModel: FeedsViewModel) {
+        self._feedsViewModel = StateObject(wrappedValue: feedsViewModel)
+    }
+     */
     
     var body: some View {
         NavigationStack {
@@ -29,29 +30,25 @@ struct FeedView: View {
                     
                     if showAll {
                         LazyVStack {
-                            ForEach(0...25, id: \.self) { post in
-                                PostRow()
+                            ForEach(self.feedsViewModel.feeds) { feed in
+                                FeedRow(feedViewModel: feed)
                             }
                         }
                         .padding(.horizontal)
                     } else {
                         LazyVStack {
-                            ForEach(0...25, id: \.self) { post in
-                                PostRow()
+                            ForEach(self.feedsViewModel.followedFeeds) { feed in
+                                FeedRow(feedViewModel: feed)
                             }
                         }
                         .padding(.horizontal)
                     }
                 }
-                //.padding(.top)
             }
             .sheet(isPresented: $showCreatePost, content: {
-                CreatePostView()
+                CreateFeedView()
                     .presentationDetents([.medium, .large])
             })
-            .refreshable {
-                // Refresh Action
-            }
             .navigationTitle("ConXpressions")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -63,19 +60,7 @@ struct FeedView: View {
                             .foregroundStyle(LinearGradient(gradient: Gradient(colors: [.blue, .red]), startPoint: .leading, endPoint: .trailing))
                     })
                 }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(action: {
-                        
-                    }, label: {
-                        Text("Translated Texts")
-                            .font(.caption2)
-                    })
-                }
             }
         }
     }
-}
-
-#Preview {
-    FeedView()
 }

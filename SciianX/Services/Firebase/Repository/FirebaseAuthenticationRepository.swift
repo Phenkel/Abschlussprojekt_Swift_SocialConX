@@ -7,18 +7,19 @@
 
 import Foundation
 import FirebaseAuth
+import FirebaseFirestore
 
-class FirebaseRepository {
+class FirebaseAuthenticationRepository {
     
-    private var user: User?
-    var userProfile: UserProfile?
-    var allUsers: [UserProfile] = []
+    var user: User?
     
-    static let shared = FirebaseRepository()
+    static let shared = FirebaseAuthenticationRepository()
+    
+    private var listener: ListenerRegistration?
     
     private init() {}
     
-    func login(email: String, password: String, completion: @escaping (Result<UserProfile?, FirebaseError>) -> Void) {
+    func login(email: String, password: String, completion: @escaping (Result<UserProfile, FirebaseError>) -> Void) {
         FirebaseManager.shared.auth.signIn(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 // AuthErrorCode.code versucht den spezifischen numerischen Error Code aus der Enumeration zu extrahieren
@@ -33,11 +34,11 @@ class FirebaseRepository {
                         completion(.failure(.differentCredentials))
                     default:
                         print("Login failed: \(error)")
-                        completion(.failure(.unknown))
+                        completion(.failure(.unknown(error)))
                     }
                 } else {
                     print("Login failed: \(error)")
-                    completion(.failure(.unknown))
+                    completion(.failure(.unknown(error)))
                 }
                 return
             }
@@ -56,7 +57,7 @@ class FirebaseRepository {
         }
     }
     
-    func register(email: String, password: String, realName: String, userName: String, completion: @escaping (Result<UserProfile?, FirebaseError>) -> Void) {
+    func register(email: String, password: String, realName: String, userName: String, completion: @escaping (Result<UserProfile, FirebaseError>) -> Void) {
         FirebaseManager.shared.auth.createUser(withEmail: email, password: password) { authResult, error in
             if let error {
                 if let errorCode = AuthErrorCode.Code(rawValue: error._code) {
@@ -71,14 +72,14 @@ class FirebaseRepository {
                         return
                     default:
                         print("Register failed: \(error)")
-                        completion(.failure(.unknown))
+                        completion(.failure(.unknown(error)))
                         return
                     }
                 }
             }
             
             guard let authResult, let email = authResult.user.email else {
-                completion(.failure(.unknown))
+                completion(.failure(.unknown(nil)))
                 return
             }
             
@@ -107,7 +108,7 @@ class FirebaseRepository {
         }
     }
     
-    func checkAuth(completion: @escaping (Result<UserProfile?, FirebaseError>) -> Void) {
+    func checkAuth(completion: @escaping (Result<UserProfile, FirebaseError>) -> Void) {
         guard let currentUser = FirebaseManager.shared.auth.currentUser else {
             print("No user logged in")
             completion(.failure(.noUserLoggedIn))
@@ -120,6 +121,28 @@ class FirebaseRepository {
         }
     }
     
+    func fetchAllUsers(completion: @escaping (Result<[UserProfile], FirebaseError>) -> Void) {
+        self.listener = FirebaseManager.shared.firestore.collection("users").addSnapshotListener { querySnapshot, error in
+            if let error {
+                print("Fetch users failed: \(error)")
+                completion(.failure(.unknown(error)))
+                return
+            }
+            
+            guard let documents = querySnapshot?.documents else {
+                print("Query Snapshot has no documents")
+                completion(.failure(.collectioNotFound))
+                return
+            }
+            
+            let allUsers = documents.compactMap { document in
+                try? document.data(as: UserProfile.self)
+            }
+            
+            completion(.success(allUsers))
+        }
+    }
+    
     private func createUserProfile(withId id: String, email: String, realName: String, userName: String) {
         let userProfile = UserProfile(
             id: id,
@@ -127,25 +150,26 @@ class FirebaseRepository {
             realName: realName,
             userName: userName,
             registeredAt: Date(),
-            lastActiveAt: Date()
+            lastActiveAt: Date(),
+            following: []
         )
         
         do {
-            try FirebaseManager.shared.firestore.collection("user").document(userProfile.id).setData(from: userProfile)
+            try FirebaseManager.shared.firestore.collection("users").document(userProfile.id).setData(from: userProfile)
         } catch {
             print("Create user failed: \(error)")
         }
     }
     
-    func fetchUserProfile(withId id: String, completion: @escaping (Result<UserProfile?, FirebaseError>) -> Void) {
+    private func fetchUserProfile(withId id: String, completion: @escaping (Result<UserProfile, FirebaseError>) -> Void) {
         FirebaseManager.shared.firestore.collection("users").document(id).getDocument { document, error in
-            if let error = error {
+            if let error {
                 print("Fetch user failed: \(error)")
-                completion(.failure(.unknown))
+                completion(.failure(.unknown(error)))
                 return
             }
             
-            guard let document = document, document.exists else {
+            guard let document else {
                 print("Document (\(id)) not found")
                 completion(.failure(.userNotFound))
                 return
@@ -156,7 +180,7 @@ class FirebaseRepository {
                 completion(.success(userProfile))
             } catch {
                 print("Decoding user failed: \(error)")
-                completion(.failure(.unknown))
+                completion(.failure(.unknown(error)))
             }
         }
     }

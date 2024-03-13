@@ -4,7 +4,7 @@
     "Account Settings" : {
 
     },
-    "Add charcter" : {
+    "Cancel" : {
 
     },
     "ConXdentity" : {
@@ -102,9 +102,6 @@
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in erat sit amet enim dapibus tempus nec quis quam. Etiam." : {
 
     },
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi." : {
-
-    },
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vehicula finibus pretium. Morbi et dolor viverra, convallis metus at, volutpat ligula. Donec non aliquam mauris. Mauris et dolor et lacus." : {
 
     },
@@ -112,6 +109,9 @@
 
     },
     "New" : {
+
+    },
+    "New Post" : {
 
     },
     "NewMessage_Key" : {
@@ -130,6 +130,9 @@
           }
         }
       }
+    },
+    "No Translation" : {
+
     },
     "Password_Key" : {
       "extractionState" : "manual",
@@ -164,6 +167,9 @@
           }
         }
       }
+    },
+    "Post" : {
+
     },
     "Profil Description" : {
 
@@ -225,6 +231,9 @@
         }
       }
     },
+    "Show original" : {
+
+    },
     "ShowAll_Key" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -262,6 +271,9 @@
     "Time" : {
 
     },
+    "Translate" : {
+
+    },
     "Translated Texts" : {
 
     },
@@ -269,6 +281,9 @@
 
     },
     "Username" : {
+
+    },
+    "Write your thoughts" : {
 
     },
     "X" : {

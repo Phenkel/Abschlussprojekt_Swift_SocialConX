@@ -9,16 +9,19 @@ import Foundation
 
 enum FirebaseError: Error, LocalizedError {
     case userNotFound
+    case collectioNotFound
     case differentCredentials
     case emailAlreadyRegistered
     case unvalidMail
     case noUserLoggedIn
-    case unknown
+    case unknown(_ error: Error?)
     
     var localizedDescription: String {
         switch self {
         case .userNotFound:
             return "User not found"
+        case .collectioNotFound:
+            return "Collection not found"
         case .differentCredentials:
             return "Mail and Password are not matching"
         case .emailAlreadyRegistered:
@@ -27,8 +30,11 @@ enum FirebaseError: Error, LocalizedError {
             return "Email is unvalid."
         case .noUserLoggedIn:
             return "No user logged in"
-        case .unknown:
-            return "An unknown error occured. Please try again later or contact support if the error persists"
+        case .unknown(let error):
+            return """
+            An error occured. Please try again later or contact support if the error persists.
+            \(error?.localizedDescription ?? "No error message found")
+            """
         }
     }
 }
