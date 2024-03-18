@@ -13,10 +13,13 @@ class AuthenticationViewModel: ObservableObject {
     @Published private(set) var errorMessage: String = ""
     @Published private(set) var allUsers: [UserProfile] = []
     
-    private var mailCheckRepository = MailCheckRepository.shared
-    private var authenticationRepository = FirebaseAuthenticationRepository.shared
+    private var mailCheckRepository: MailCheckRepository
+    private var authenticationRepository: AuthenticationRepository
     
-    init() {
+    init(authenticationRepository: AuthenticationRepository, mailCheckRepository: MailCheckRepository) {
+        self.authenticationRepository = authenticationRepository
+        self.mailCheckRepository = mailCheckRepository
+        
         self.authenticationRepository.checkAuth() { result in
             switch result {
             case .success(let user):
@@ -61,7 +64,7 @@ class AuthenticationViewModel: ObservableObject {
             return
         }
         
-        guard allUsers.contains(where: { $0.userName.lowercased() == userName.lowercased() }) else {
+        guard !allUsers.contains(where: { $0.userName.lowercased() == userName.lowercased() }) else {
             self.errorMessage = "Username is already in use"
             return
         }

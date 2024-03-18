@@ -9,7 +9,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
-class FirebaseAuthenticationRepository {
+class FirebaseAuthenticationRepository: AuthenticationRepository {
     
     var user: User?
     
@@ -97,14 +97,15 @@ class FirebaseAuthenticationRepository {
         }
     }
     
-    func logout() {
+    func logout(completion: @escaping (Result<UserProfile?, FirebaseError>) -> Void) {
         do {
             try FirebaseManager.shared.auth.signOut()
             self.user = nil
-            
             print("User logged out")
+            completion(.success(nil))
         } catch {
             print("Signing out failed: \(error)")
+            completion(.failure(.unknown(error)))
         }
     }
     
@@ -140,6 +141,18 @@ class FirebaseAuthenticationRepository {
             }
             
             completion(.success(allUsers))
+        }
+    }
+    
+    func deleteUser(withId id: String) {
+        FirebaseManager.shared.auth.currentUser?.delete()
+        
+        FirebaseManager.shared.firestore.collection("users").document(id).delete() { error in
+            if let error {
+                print("Deleting user -> \(id) failed: \(error)")
+            } else {
+                print("User -> \(id) deleted")
+            }
         }
     }
     

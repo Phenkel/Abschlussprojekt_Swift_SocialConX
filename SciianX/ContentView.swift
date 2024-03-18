@@ -28,7 +28,7 @@ struct ContentView: View {
                 }
                 .tag(PageSelection.explore)
             
-            ChatView()
+            ChatOverViewView()
                 .tabItem {
                     Image(systemName: selected == .chat ? "message.fill" : "message")
                         .environment(\.symbolVariants, selected == .chat ? .fill : .none)

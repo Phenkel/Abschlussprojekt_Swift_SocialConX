@@ -100,7 +100,3 @@ struct LoginAndRegisterView: View {
     }
 }
 
-#Preview {
-    LoginAndRegisterView()
-        .environmentObject(AuthenticationViewModel())
-}

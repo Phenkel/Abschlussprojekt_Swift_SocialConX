@@ -7,16 +7,18 @@
 
 import SwiftUI
 import FirebaseCore
+import StreamChat
+import StreamChatSwiftUI
 
 @main
 struct SciianXApp: App {
+    
+    @StateObject var authenticationViewModel = AuthenticationViewModel(authenticationRepository: FirebaseAuthenticationRepository.shared, mailCheckRepository: ApiMailCheckRepository.shared)
     
     init() {
         FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
     }
-    
-    @StateObject var authenticationViewModel = AuthenticationViewModel()
     
     var body: some Scene {
         WindowGroup {
