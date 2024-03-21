@@ -2,16 +2,10 @@ import SwiftUI
 
 struct FeedView: View {
     
-    @StateObject var feedsViewModel: FeedsViewModel
+    @EnvironmentObject var feedsViewModel: FeedsViewModel
     
     @State private var showAll = true
     @State private var showCreatePost = false
-    
-    /*
-    init(feedsViewModel: FeedsViewModel) {
-        self._feedsViewModel = StateObject(wrappedValue: feedsViewModel)
-    }
-     */
     
     var body: some View {
         NavigationStack {

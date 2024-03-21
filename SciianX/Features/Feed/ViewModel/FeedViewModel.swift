@@ -18,6 +18,7 @@ class FeedViewModel: ObservableObject, Identifiable {
     @Published private(set) var createdAtString: String
     @Published private(set) var updatedAt: Date
     @Published private(set) var activeUsers: [UserProfile]
+    @Published private(set) var images: [String]
     @Published private(set) var richPreviews: [RichPreviewViewModel] = []
     
     let id: String?
@@ -40,6 +41,8 @@ class FeedViewModel: ObservableObject, Identifiable {
         }()
         self.updatedAt = feed.updatedAt
         self.activeUsers = feed.activeUsers
+        self.images = feed.images
+        
         self.id = feed.id
         self.user = user
         self.originalText = feed.text
@@ -83,31 +86,34 @@ class FeedViewModel: ObservableObject, Identifiable {
             },
             createdAt: self.createdAt,
             updatedAt: self.updatedAt,
-            activeUsers: self.activeUsers
+            activeUsers: self.activeUsers,
+            images: self.images
         )
     }
     
     private func filterAndReplaceURs(_ text: String) -> (String, [(number: String, url: URL)]) {
+        // Create a regular expression to match URLs.
+        // The pattern includes:
+        // - https?://: Matches the "http://" or "https://" protocol prefix.
+        // - www.: Matches the "www." subdomain prefix.
+        // - [-a-zA-Z0-9+&@#/%?=~_|!:,.;]*: Matches any combination of letters, numbers, symbols, and punctuation characters.
+        // - [-a-zA-Z0-9+&@#/%=~_|]: Matches any combination of letters, numbers, symbols, and punctuation characters at the end of the URL.
+        let regex = try! NSRegularExpression(pattern: "(https?://|www\\.)[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")
+        let matches = regex.matches(in: text, range: NSRange(location: 0, length: text.utf16.count))
+        
         var replacedText = text
         var urls: [(String, URL)] = []
         var counter = 1
         
-        let scanner = Scanner(string: text)
-        scanner.charactersToBeSkipped = NSCharacterSet.whitespacesAndNewlines
-        
-        while !scanner.isAtEnd {
-            var urlString: NSString?
-            scanner.scanCharacters(from: NSCharacterSet.urlQueryAllowed, into: &urlString)
-            
-            if let urlString {
-                if let url = URL(string: urlString as String) {
-                    let replacement = "(\(counter))"
-                    replacedText = replacedText.replacingOccurrences(of: urlString as String, with: replacement)
-                    
-                    urls.append((replacement, url))
-                    
-                    counter += 1
-                }
+        for match in matches {
+            let urlString = (text as NSString).substring(with: match.range)
+            if let url = URL(string: urlString) {
+                let replacement = "(\(counter))"
+                replacedText = replacedText.replacingOccurrences(of: urlString, with: replacement)
+                
+                urls.append((replacement, url))
+                
+                counter += 1
             }
         }
         

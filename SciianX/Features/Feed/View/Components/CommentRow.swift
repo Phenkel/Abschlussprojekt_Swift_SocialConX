@@ -63,8 +63,7 @@ struct CommentRow: View {
             Divider()
         }
         .onAppear {
-            // MARK: Kommentar um Requests zu sparen
-            //self.commentViewModel.translateText()
+            self.commentViewModel.translateText()
         }
         .onChange(of: self.textIsTranslated) {
             if self.textIsTranslated {
@@ -74,8 +73,4 @@ struct CommentRow: View {
             }
         }
     }
-}
-
-#Preview {
-    CommentRow(commentViewModel: dummyCommentViewModel)
 }

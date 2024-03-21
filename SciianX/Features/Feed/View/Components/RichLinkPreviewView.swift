@@ -17,22 +17,32 @@ struct RichLinkPreviewView: View {
         
     var body: some View {
         VStack(alignment: .leading) {
-            Text(self.richPreviewViewModel.number + " " + (self.richPreviewViewModel.title ?? ""))
-                .font(.caption)
-                .fontWeight(.bold)
-            
             if let videoUrl = self.richPreviewViewModel.videoUrl {
+                Text(self.richPreviewViewModel.number + " " + (self.richPreviewViewModel.title ?? ""))
+                    .font(.caption)
+                    .fontWeight(.bold)
+                
                 VideoPlayer(player: self.player)
-                    .frame(maxWidth: .infinity)
                     .scaledToFit()
+                    .frame(maxWidth: .infinity)
                     .onAppear {
                         self.player = AVPlayer(url: videoUrl)
                     }
             } else if let image = self.richPreviewViewModel.image {
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(maxWidth: .infinity)
-                    .scaledToFit()
+                HStack(spacing: 16) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                    .frame(height: 100)
+                    
+                    Text(self.richPreviewViewModel.number + " " + (self.richPreviewViewModel.title ?? ""))
+                        .font(.caption)
+                        .fontWeight(.bold)
+                }
+            } else {
+                Text(self.richPreviewViewModel.number + " " + (self.richPreviewViewModel.title ?? ""))
+                    .font(.caption)
+                    .fontWeight(.bold)
             }
             
             if let description = self.richPreviewViewModel.description {
@@ -89,7 +99,7 @@ struct RichLinkPreviewView: View {
 }
 
 #Preview {
-    guard let url = URL(string: "https://swiftpackageindex.com/nmdias/FeedKit") else {
+    guard let url = URL(string: "https://github.com/exyte/Chat") else {
         return ProfileView()
     }
     

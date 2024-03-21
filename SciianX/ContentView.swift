@@ -7,18 +7,24 @@ enum PageSelection: String {
 struct ContentView: View {
     
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @StateObject var feedsViewModel: FeedsViewModel
     
     @State private var selected: PageSelection = .feed
     
+    init(_ authenticationViewModel: AuthenticationViewModel) {
+        self._feedsViewModel = StateObject(wrappedValue: FeedsViewModel(authenticationViewModel.user))
+    }
+    
     var body: some View {
         TabView(selection: $selected) {
-            FeedView(feedsViewModel: FeedsViewModel(self.authenticationViewModel.user))
+            FeedView()
                 .tabItem {
                     Image(systemName: selected == .feed ? "house.fill" : "house")
                         .environment(\.symbolVariants, selected == .feed ? .fill : .none)
                     Text("Xpressions")
                 }
                 .tag(PageSelection.feed)
+                .environmentObject(self.feedsViewModel)
             
             ExploreView()
                 .tabItem {
@@ -44,6 +50,7 @@ struct ContentView: View {
                     Text("Xtivity")
                 }
                 .tag(PageSelection.activity)
+                .environmentObject(self.feedsViewModel)
             
             ProfileView()
                 .tabItem {
@@ -52,6 +59,7 @@ struct ContentView: View {
                     Text("Xdentity")
                 }
                 .tag(PageSelection.profile)
+                .environmentObject(self.feedsViewModel)
         }
     }
 }

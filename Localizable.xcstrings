@@ -4,7 +4,16 @@
     "Account Settings" : {
 
     },
+    "Add up to 5 images" : {
+
+    },
     "Cancel" : {
+
+    },
+    "Close" : {
+
+    },
+    "Comments" : {
 
     },
     "ConXdentity" : {
@@ -79,6 +88,9 @@
     "Hello, World!" : {
 
     },
+    "ImagePicker" : {
+
+    },
     "Login_Key" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -132,6 +144,9 @@
       }
     },
     "No Translation" : {
+
+    },
+    "Open in Browser" : {
 
     },
     "Password_Key" : {
@@ -213,6 +228,9 @@
           }
         }
       }
+    },
+    "See more" : {
+
     },
     "Settings_Key" : {
       "extractionState" : "manual",

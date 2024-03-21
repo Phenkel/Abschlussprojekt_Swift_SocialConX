@@ -7,16 +7,23 @@
 
 import Foundation
 import FirebaseFirestore
+import FirebaseStorage
 
 class FirebaseFeedRepository {
     
     static let shared = FirebaseFeedRepository()
     
     private var listener: ListenerRegistration?
-        
+    
     private init() {}
     
-    func createFeed(_ text: String, withUser user: UserProfile) {
+    func createFeed(_ text: String, _ images: [Data], withUser user: UserProfile) async {
+        var imageUrls: [URL?] = []
+        
+        for imageData in images {
+            imageUrls.append(await self.uploadImage(imageData, withUserId: user.id))
+        }
+                
         let feed = Feed(
             creator: user,
             text: text,
@@ -24,7 +31,8 @@ class FirebaseFeedRepository {
             comments: [],
             createdAt: Date(),
             updatedAt: Date(),
-            activeUsers: []
+            activeUsers: [],
+            images: imageUrls.compactMap { $0?.absoluteString }
         )
         
         do {
@@ -45,7 +53,9 @@ class FirebaseFeedRepository {
         }
         
         do {
-            try FirebaseManager.shared.firestore.collection("feeds").document().setData(from: updatedFeed, merge: true)
+            if let id = updatedFeed.id {
+                try FirebaseManager.shared.firestore.collection("feeds").document(id).setData(from: updatedFeed, merge: true)
+            }
         } catch {
             print("Like feed failed: \(error)")
         }
@@ -58,7 +68,9 @@ class FirebaseFeedRepository {
         }
         
         do {
-            try FirebaseManager.shared.firestore.collection("feeds").document().setData(from: updatedFeed, merge: true)
+            if let id = updatedFeed.id {
+                try FirebaseManager.shared.firestore.collection("feeds").document(id).setData(from: updatedFeed, merge: true)
+            }
         } catch {
             print("Like feed failed: \(error)")
         }
@@ -83,6 +95,28 @@ class FirebaseFeedRepository {
             }
             
             completion(.success(allFeeds))
+        }
+    }
+    
+    private func uploadImage(_ imageData: Data, withUserId id: String) async -> URL? {
+        return await withUnsafeContinuation { continuation in
+            let imageRef = FirebaseManager.shared.storageRef.child("feeds/\(id)/\(UUID().uuidString).jpg")
+            
+            imageRef.putData(imageData) { _, error in
+                if let error {
+                    print("Failed uploading image: \(error)")
+                    continuation.resume(returning: nil)
+                }
+                
+                imageRef.downloadURL { url, error in
+                    if let error {
+                        print("Failed getting url: \(error)")
+                        continuation.resume(returning: nil)
+                    }
+                    
+                    continuation.resume(returning: url)
+                }
+            }
         }
     }
 }

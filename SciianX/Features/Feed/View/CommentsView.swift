@@ -9,9 +9,10 @@ import SwiftUI
 
 struct CommentsView: View {
     
-    var comments: [CommentViewModel]
+    @EnvironmentObject var feedViewModel: FeedViewModel
     
     @State private var comment = ""
+    
     @Environment (\.dismiss) var dismiss
     
     var body: some View {
@@ -47,10 +48,10 @@ struct CommentsView: View {
                         }
                         
                         Divider()
-                                        
+                        
                         LazyVStack {
-                            ForEach(0...25, id: \.self) { comment in
-                                CommentRow(commentViewModel: dummyCommentViewModel)
+                            ForEach(self.feedViewModel.comments) { comment in
+                                CommentRow(commentViewModel: comment)
                             }
                         }
                     }
@@ -67,20 +68,16 @@ struct CommentsView: View {
                         }
                         ToolbarItem(placement: .topBarTrailing) {
                             Button(action: {
-                                // MARK: POST ACTION
+                                self.feedViewModel.createComment(comment)
                                 self.dismiss()
                             }, label: {
                                 Text("Post")
                             })
                             .disabled(self.comment.isEmpty)
                         }
-                }
+                    }
                 }
             }
         }
     }
-}
-
-#Preview {
-    CommentsView(comments: [])
 }

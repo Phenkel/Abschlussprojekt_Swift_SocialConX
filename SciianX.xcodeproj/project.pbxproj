@@ -30,7 +30,6 @@
 		106BC98F2B5EE81E00512A61 /* ProfileViewFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106BC98E2B5EE81E00512A61 /* ProfileViewFilter.swift */; };
 		106BC9912B5FF10A00512A61 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 106BC9902B5FF10A00512A61 /* EditProfileView.swift */; };
 		107635882BA85F6400E6E462 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107635872BA85F6400E6E462 /* ChatViewModel.swift */; };
-		1076358A2BA8650800E6E462 /* CustomChannelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 107635892BA8650800E6E462 /* CustomChannelView.swift */; };
 		1094B8E92B9F0FE200F2B562 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1094B8E82B9F0FE200F2B562 /* AuthenticationViewModel.swift */; };
 		1094B8EB2B9F390400F2B562 /* FirebaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1094B8EA2B9F390400F2B562 /* FirebaseError.swift */; };
 		1094B8ED2BA050F800F2B562 /* FirebaseFeedRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1094B8EC2BA050F800F2B562 /* FirebaseFeedRepository.swift */; };
@@ -56,7 +55,6 @@
 		1094B9322BA8357F00F2B562 /* ExyteChat in Frameworks */ = {isa = PBXBuildFile; productRef = 1094B9312BA8357F00F2B562 /* ExyteChat */; };
 		1094B9342BA835B000F2B562 /* DetailChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1094B9332BA835B000F2B562 /* DetailChatView.swift */; };
 		1094B9372BA83F2300F2B562 /* StreamChatSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1094B9362BA83F2300F2B562 /* StreamChatSwiftUI */; };
-		1094B9392BA85E5D00F2B562 /* StreamChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1094B9382BA85E5D00F2B562 /* StreamChatManager.swift */; };
 		1099C3532B91E14F005BD033 /* CreateFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099C3522B91E14F005BD033 /* CreateFeedView.swift */; };
 		1099C35A2B91F2BF005BD033 /* MailCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099C3592B91F2BF005BD033 /* MailCheck.swift */; };
 		1099C35C2B91F330005BD033 /* ApiMailCheckRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1099C35B2B91F330005BD033 /* ApiMailCheckRepository.swift */; };
@@ -145,7 +143,6 @@
 		106BC98E2B5EE81E00512A61 /* ProfileViewFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewFilter.swift; sourceTree = "<group>"; };
 		106BC9902B5FF10A00512A61 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		107635872BA85F6400E6E462 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
-		107635892BA8650800E6E462 /* CustomChannelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomChannelView.swift; sourceTree = "<group>"; };
 		1094B8E82B9F0FE200F2B562 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		1094B8EA2B9F390400F2B562 /* FirebaseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseError.swift; sourceTree = "<group>"; };
 		1094B8EC2BA050F800F2B562 /* FirebaseFeedRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFeedRepository.swift; sourceTree = "<group>"; };
@@ -169,7 +166,6 @@
 		1094B92C2BA3CE4D00F2B562 /* RichLinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichLinkPreviewView.swift; sourceTree = "<group>"; };
 		1094B92E2BA49E6B00F2B562 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		1094B9332BA835B000F2B562 /* DetailChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailChatView.swift; sourceTree = "<group>"; };
-		1094B9382BA85E5D00F2B562 /* StreamChatManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamChatManager.swift; sourceTree = "<group>"; };
 		1099C3522B91E14F005BD033 /* CreateFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedView.swift; sourceTree = "<group>"; };
 		1099C3592B91F2BF005BD033 /* MailCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailCheck.swift; sourceTree = "<group>"; };
 		1099C35B2B91F330005BD033 /* ApiMailCheckRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiMailCheckRepository.swift; sourceTree = "<group>"; };
@@ -392,7 +388,6 @@
 			children = (
 				107635862BA85F5700E6E462 /* ViewModel */,
 				10420A752B5019D0007F23FA /* View */,
-				1094B9382BA85E5D00F2B562 /* StreamChatManager.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -659,7 +654,6 @@
 			children = (
 				10DBC8A12B83988A000598E9 /* ChatPreviewRow.swift */,
 				104D9CBB2B8E0EB1003ED2C4 /* ChatMessage.swift */,
-				107635892BA8650800E6E462 /* CustomChannelView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -873,8 +867,6 @@
 				1099C3B22B977855005BD033 /* UserProfile.swift in Sources */,
 				10FA967A2B8CA1CF001B33EB /* BigButton.swift in Sources */,
 				10420A862B516314007F23FA /* ProfilePreviewRow.swift in Sources */,
-				1076358A2BA8650800E6E462 /* CustomChannelView.swift in Sources */,
-				1094B9392BA85E5D00F2B562 /* StreamChatManager.swift in Sources */,
 				1099C3642B91F763005BD033 /* TranslationRepository.swift in Sources */,
 				10420A2C2B4F572B007F23FA /* SciianXApp.swift in Sources */,
 				1094B9152BA2683500F2B562 /* MockAuthenticationRepository.swift in Sources */,

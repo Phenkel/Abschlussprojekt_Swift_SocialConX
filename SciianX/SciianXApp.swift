@@ -23,7 +23,7 @@ struct SciianXApp: App {
     var body: some Scene {
         WindowGroup {
             if authenticationViewModel.user != nil {
-                ContentView()
+                ContentView(self.authenticationViewModel)
                     .environmentObject(self.authenticationViewModel)
             } else {
                 LoginAndRegisterView()

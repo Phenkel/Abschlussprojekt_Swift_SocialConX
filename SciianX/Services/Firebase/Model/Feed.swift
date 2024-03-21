@@ -18,6 +18,7 @@ struct Feed: Codable {
     let createdAt: Date
     let updatedAt: Date
     let activeUsers: [UserProfile]
+    let images: [String]
     
 }
 
@@ -38,6 +39,7 @@ extension Feed {
         var createdAt: Date
         var updatedAt: Date
         var activeUsers: [UserProfile]
+        var images: [String]
         
         fileprivate init(feed: Feed) {
             self.id = feed.id
@@ -48,6 +50,7 @@ extension Feed {
             self.createdAt = feed.createdAt
             self.updatedAt = feed.updatedAt
             self.activeUsers = feed.activeUsers
+            self.images = feed.images
         }
         
         fileprivate func toFeed() -> Feed {
@@ -59,7 +62,8 @@ extension Feed {
                 comments: comments,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
-                activeUsers: activeUsers
+                activeUsers: activeUsers,
+                images: images
             )
         }
     }

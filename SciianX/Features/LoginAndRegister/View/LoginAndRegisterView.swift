@@ -5,11 +5,11 @@ struct LoginAndRegisterView: View {
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     
     @State private var isLogin = true
-    @State private var email = ""
-    @State private var password = ""
-    @State private var passwordConfirm = ""
-    @State private var realName = ""
-    @State private var userName = ""
+    @State private var email = "philipphnkl@proton.me"
+    @State private var password = "Ezio130697"
+    @State private var passwordConfirm = "Ezio130697"
+    @State private var realName = "Philipp Henkel"
+    @State private var userName = "philipphnkl"
     
     var body: some View {
         NavigationView {

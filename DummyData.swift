@@ -22,7 +22,8 @@ var dummyFeed = Feed(
     comments: [],
     createdAt: Date(),
     updatedAt: Date(),
-    activeUsers: []
+    activeUsers: [],
+    images: []
 )
 
 var dummyFeedViewModel = FeedViewModel(dummyFeed, withUser: UserProfile(

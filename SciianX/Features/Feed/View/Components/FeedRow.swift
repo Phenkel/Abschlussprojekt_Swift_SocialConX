@@ -77,13 +77,43 @@ struct FeedRow: View {
                         }
                         .font(.footnote)
                     }
+                    
+                    if !self.feedViewModel.images.isEmpty {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(alignment: .center) {
+                                ForEach(self.feedViewModel.images, id: \.self) { url in
+                                    AsyncImage(
+                                        url: URL(string: url),
+                                        content: { image in
+                                            image
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 200)
+                                        },
+                                        placeholder: {
+                                            Image(systemName: "network.slash")
+                                        }
+                                    )
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                        .frame(height: 200)
+                    }
+                    
+                    Divider()
+                    
+                    if !self.feedViewModel.richPreviews.isEmpty {
+                        ForEach(self.feedViewModel.richPreviews) { richLinkPreview in
+                            RichLinkPreviewView(richPreviewViewModel: richLinkPreview)
+                        }
+                    }
                 }
             }
-            
-            Divider()
         }
         .sheet(isPresented: $showComments, content: {
-            CommentsView(comments: self.feedViewModel.comments)
+            CommentsView()
+                .environmentObject(self.feedViewModel)
                 .presentationDetents([.medium, .large])
         })
         .onAppear {
