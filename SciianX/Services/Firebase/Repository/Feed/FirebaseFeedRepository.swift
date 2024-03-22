@@ -13,7 +13,8 @@ class FirebaseFeedRepository {
     
     static let shared = FirebaseFeedRepository()
     
-    private var listener: ListenerRegistration?
+    private var feedIdsListener: ListenerRegistration?
+    private var feedsListeners: [ListenerRegistration] = []
     
     private init() {}
     
@@ -77,7 +78,7 @@ class FirebaseFeedRepository {
     }
     
     func fetchAllFeeds(completion: @escaping (Result<[Feed], FirebaseError>) -> Void) {
-        self.listener = FirebaseManager.shared.firestore.collection("feeds").addSnapshotListener { querySnapshot, error in
+        self.feedIdsListener = FirebaseManager.shared.firestore.collection("feeds").addSnapshotListener { querySnapshot, error in
             if let error {
                 print("Fetch feeds failed: \(error)")
                 completion(.failure(.unknown(error)))
@@ -97,6 +98,32 @@ class FirebaseFeedRepository {
             completion(.success(allFeeds))
         }
     }
+    
+//    func fetchFeed(_ feedId: String, completion: @escaping (Result<Feed, FirebaseError>) -> Void) {
+//        self.listener = FirebaseManager.shared.firestore.collection("feeds").document(feedId).addSnapshotListener { documentSnapshot, error in
+//            if let error {
+//                print("Fetch feeds failed: \(error)")
+//                completion(.failure(.unknown(error)))
+//                return
+//            }
+//            
+//            guard let document = documentSnapshot else {
+//                print("Document Snapshot has no data")
+//                completion(.failure(.documentNotFound))
+//                return
+//            }
+//            
+//            let feed = try? document.data(as: Feed.self)
+//            
+//            guard let feed else {
+//                print("Document Snapshot has no data")
+//                completion(.failure(.documentNotFound))
+//                return
+//            }
+//            
+//            completion(.success(feed))
+//        }
+//    }
     
     private func uploadImage(_ imageData: Data, withUserId id: String) async -> URL? {
         return await withUnsafeContinuation { continuation in

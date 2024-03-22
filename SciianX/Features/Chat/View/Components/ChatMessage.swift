@@ -12,6 +12,7 @@ struct ChatMessage: View {
     var fromUser: Bool = true
     
     var body: some View {
+        
         if fromUser {
             HStack {
                 Spacer()

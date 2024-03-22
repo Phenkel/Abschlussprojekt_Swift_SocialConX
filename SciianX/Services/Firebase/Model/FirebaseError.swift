@@ -10,6 +10,7 @@ import Foundation
 enum FirebaseError: Error, LocalizedError {
     case userNotFound
     case collectioNotFound
+    case documentNotFound
     case differentCredentials
     case emailAlreadyRegistered
     case unvalidMail
@@ -22,6 +23,8 @@ enum FirebaseError: Error, LocalizedError {
             return "User not found"
         case .collectioNotFound:
             return "Collection not found"
+            case .documentNotFound:
+            return "Document not found"
         case .differentCredentials:
             return "Mail and Password are not matching"
         case .emailAlreadyRegistered:
