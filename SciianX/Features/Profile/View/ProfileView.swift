@@ -97,7 +97,7 @@ struct ProfileView: View {
                         if postsFilter == .xpression {
                             LazyVStack {
                                 ForEach(0...25, id: \.self) { post in
-                                    FeedRow(feedViewModel: dummyFeedViewModel)
+                                    FeedRow(dummyFeedViewModel)
                                 }
                             }
                         } else if postsFilter == .xchange {

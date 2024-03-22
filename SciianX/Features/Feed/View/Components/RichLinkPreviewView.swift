@@ -25,6 +25,7 @@ struct RichLinkPreviewView: View {
                 VideoPlayer(player: self.player)
                     .scaledToFit()
                     .frame(maxWidth: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                     .onAppear {
                         self.player = AVPlayer(url: videoUrl)
                     }
@@ -33,6 +34,7 @@ struct RichLinkPreviewView: View {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     .frame(height: 100)
                     
                     Text(self.richPreviewViewModel.number + " " + (self.richPreviewViewModel.title ?? ""))

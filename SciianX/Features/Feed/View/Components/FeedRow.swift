@@ -3,17 +3,23 @@ import SwiftUI
 struct FeedRow: View {
     
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
-    @StateObject var feedViewModel: FeedViewModel
+    @ObservedObject private var feedViewModel: FeedViewModel
+    private weak var weakFeedViewModel: FeedViewModel?
     
     @State private var showComments = false
     @State private var translationActive: Bool = false
     
     private var textIsTranslated: Bool {
-        feedViewModel.translatedText != nil
+        self.feedViewModel.translatedText != nil
+    }
+    
+    init(_ feedViewModel: FeedViewModel) {
+        self.weakFeedViewModel = feedViewModel
+        self._feedViewModel = ObservedObject(wrappedValue: weakFeedViewModel ?? feedViewModel)
     }
     
     var body: some View {
-        VStack() {
+        VStack(spacing: 8) {
             HStack(alignment: .top, spacing: 16) {
                 ProfilePictureSmall()
                 
@@ -77,37 +83,38 @@ struct FeedRow: View {
                         }
                         .font(.footnote)
                     }
-                    
-                    if !self.feedViewModel.images.isEmpty {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(alignment: .center) {
-                                ForEach(self.feedViewModel.images, id: \.self) { url in
-                                    AsyncImage(
-                                        url: URL(string: url),
-                                        content: { image in
-                                            image
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(height: 200)
-                                        },
-                                        placeholder: {
-                                            Image(systemName: "network.slash")
-                                        }
-                                    )
+                }
+            }
+            
+            if !self.feedViewModel.images.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(alignment: .center) {
+                        ForEach(self.feedViewModel.images, id: \.self) { url in
+                            AsyncImage(
+                                url: URL(string: url),
+                                content: { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 200)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                },
+                                placeholder: {
+                                    Image(systemName: "network.slash")
                                 }
-                            }
-                            .padding(.horizontal)
-                        }
-                        .frame(height: 200)
-                    }
-                    
-                    Divider()
-                    
-                    if !self.feedViewModel.richPreviews.isEmpty {
-                        ForEach(self.feedViewModel.richPreviews) { richLinkPreview in
-                            RichLinkPreviewView(richPreviewViewModel: richLinkPreview)
+                            )
                         }
                     }
+                    .padding(.horizontal)
+                }
+                .frame(height: 200)
+            }
+            
+            Divider()
+            
+            if !self.feedViewModel.richPreviews.isEmpty {
+                ForEach(self.feedViewModel.richPreviews) { richLinkPreview in
+                    RichLinkPreviewView(richPreviewViewModel: richLinkPreview)
                 }
             }
         }

@@ -52,6 +52,32 @@ class FeedViewModel: ObservableObject, Identifiable {
         self.urlSetsToRichPreviews(urlSet: urlSets)
     }
     
+    init(_ feed: Feed, withUser user: UserProfile, translatedText: String?) {
+        self.creator = feed.creator
+        self.text = feed.text
+        self.likes = feed.likes
+        self.comments = feed.comments.compactMap { CommentViewModel($0) }
+        self.createdAt = feed.createdAt
+        self.createdAtString = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd.MM.yy HH:mm"
+            return formatter.string(from: feed.createdAt)
+        }()
+        self.updatedAt = feed.updatedAt
+        self.activeUsers = feed.activeUsers
+        self.images = feed.images
+        
+        self.id = feed.id
+        self.user = user
+        self.originalText = feed.text
+        
+        let (text, urlSets) = filterAndReplaceURs(self.text)
+        self.text = text
+        self.urlSetsToRichPreviews(urlSet: urlSets)
+        
+        self.translatedText = translatedText
+    }
+    
     @MainActor
     func translateText() {
         Task {

@@ -23,16 +23,16 @@ struct FeedView: View {
                     .padding()
                     
                     if showAll {
-                        LazyVStack {
+                        VStack {
                             ForEach(self.feedsViewModel.feeds) { feed in
-                                FeedRow(feedViewModel: feed)
+                                FeedRow(feed)
                             }
                         }
                         .padding(.horizontal)
                     } else {
-                        LazyVStack {
+                        VStack {
                             ForEach(self.feedsViewModel.followedFeeds) { feed in
-                                FeedRow(feedViewModel: feed)
+                                FeedRow(feed)
                             }
                         }
                         .padding(.horizontal)

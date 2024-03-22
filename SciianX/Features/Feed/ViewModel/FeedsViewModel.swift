@@ -51,18 +51,28 @@ class FeedsViewModel: ObservableObject {
     }
     
     private func fetchAllFeeds() {
-        feedRepository.fetchAllFeeds() { result in
+        feedRepository.fetchAllFeeds() { [weak self] result in
             switch result {
             case .success(let allFeeds):
-                if let user = self.user {
-                    self.feeds = allFeeds.compactMap { FeedViewModel($0, withUser: user) }
-                    self.feeds.sort(by: { $0.updatedAt > $1.updatedAt })
+                if let user = self?.user {
+                    let oldFeeds = self?.feeds ?? []
                     
-                    self.followedFeeds = self.feeds.filter { user.following.contains($0.creator) }
+                    self?.feeds = allFeeds.compactMap { feed in
+                        if let oldFeed = oldFeeds.first(where: { $0.id == feed.id }) {
+                            FeedViewModel(feed, withUser: user, translatedText: oldFeed.translatedText)
+                        } else {
+                            FeedViewModel(feed, withUser: user)
+                        }
+                    }
+                    self?.feeds.sort(by: { $0.updatedAt > $1.updatedAt })
                     
-                    self.ownFeeds = self.feeds.filter { $0.creator == user }
-                    
-                    self.usedFeeds = self.feeds.filter { $0.activeUsers.contains(user) }
+                    if let feeds = self?.feeds {
+                        self?.followedFeeds = feeds.filter { user.following.contains($0.creator) }
+                        
+                        self?.ownFeeds = feeds.filter { $0.creator == user }
+                        
+                        self?.usedFeeds = feeds.filter { $0.activeUsers.contains(user) }
+                    }
                 }
             case .failure(let error):
                 print("Failed fetching feeds: \(error)")
